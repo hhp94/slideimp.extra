@@ -4,7 +4,7 @@
 \alias{set_slideimp_path}
 \title{Set Path for slideimp Data}
 \usage{
-set_slideimp_path(path = NULL)
+set_slideimp_path(path)
 }
 \arguments{
 \item{path}{Character string specifying the directory path, or \code{NULL} to
@@ -15,4 +15,16 @@ Invisibly returns \code{NULL}.
 }
 \description{
 Sets the slideimp data directory path for the current R session.
+}
+\examples{
+# default path
+get_slideimp_path()
+
+# set path for this session
+set_slideimp_path("test")
+get_slideimp_path()
+
+# reset to default
+set_slideimp_path(NULL)
+get_slideimp_path()
 }

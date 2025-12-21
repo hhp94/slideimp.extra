@@ -23,10 +23,14 @@ The path is determined by:
 \item Base R default via \code{tools::R_user_dir("slideimp", "data")}
 }
 
-To override permanently, add to your \verb{~/.Renviron}:
+To override permanently, add to your \verb{~/.Renviron} (i.e., \code{file.edit("~/.Renviron")}):
 \preformatted{
 SLIDEIMP="/your/custom/path"
 }
 
 To override temporarily, use \code{\link[=set_slideimp_path]{set_slideimp_path()}}.
+}
+\examples{
+get_slideimp_path()
+
 }

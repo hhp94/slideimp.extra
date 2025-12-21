@@ -1,22 +1,23 @@
 Type: Package
 Package: slideimp.extra
-Title: What the Package Does (Title Case)
-Version: 0.1.0
+Title: slideimp Package Helpers
+Version: 0.6.7
 Authors@R: 
     person("Hung", "Pham", , "amser.hoanghung@gmail.com", role = c("aut", "cre"))
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
-License: What license is it under?
+Description: Contains helper functions for the slideimp package. These
+    functions handle the pathing, download the Illumina Methylation
+    manifests, clean them, and store the cleaned objects locally.
+License: MIT + file LICENSE
 Depends: 
     R (>= 4.1.0)
 Imports: 
     checkmate,
+    data.table,
     fs,
     fst,
     rlang,
-    tibble,
+    utils,
     withr
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
