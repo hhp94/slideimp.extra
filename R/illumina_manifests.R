@@ -288,7 +288,3 @@ ilmn_manifest <- function(
   names(dt) <- c("feature_id", "group")
   return(dt)
 }
-
-fn <- function() {
-  data.table::fread
-}
