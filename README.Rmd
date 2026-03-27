@@ -32,6 +32,7 @@ pak::pak("hhp94/slideimp.extra")
 ## Path Management
 ```{r, include = FALSE}
 library(slideimp.extra)
+set.seed(1234)
 ```
 
 The `slideimp` package manages its data directory path via the environment variable `SLIDEIMP`, with options for session-based or consistent overrides.
@@ -50,7 +51,7 @@ set_slideimp_path(NULL)
 - **Consistent override**: 
 Add to `~/.Renviron` (i.e., `file.edit("~/.Renviron")`) and reset your R session:
 ```{r}
-SLIDEIMP <- "/your/custom/path"
+SLIDEIMP="/your/custom/path"
 ```
 
 ## Download Manifests

@@ -43,7 +43,7 @@ set_slideimp_path(NULL)
   `file.edit("~/.Renviron")`) and reset your R session:
 
 ``` r
-SLIDEIMP <- "/your/custom/path"
+SLIDEIMP="/your/custom/path"
 ```
 
 ## Download Manifests
@@ -89,22 +89,22 @@ head(msa)
 # simulate some data
 obj <- matrix(runif(10 * 20), nrow = 10, dimnames = list(seq_len(10), sample(msa$features, size = 20)))
 obj[1:4, 1:4]
-#>   cg14302909_TC22 cg27125641_BC21 cg09643312_TC21 cg20043937_TC21
-#> 1       0.4841736       0.5346202       0.9785727       0.6110280
-#> 2       0.4191149       0.9988116       0.9976588       0.4657359
-#> 3       0.2546880       0.4220848       0.8610029       0.3019090
-#> 4       0.7868505       0.7702517       0.5032576       0.3093622
+#>   cg17139861_TC21 cg06879777_TC21 cg23447905_BC21 cg12347757_TC11
+#> 1       0.1137034       0.6935913      0.31661245       0.4560915
+#> 2       0.6222994       0.5449748      0.30269337       0.2651867
+#> 3       0.6092747       0.2827336      0.15904600       0.3046722
+#> 4       0.6233794       0.9234335      0.03999592       0.5073069
 group_df <- group_features(obj, msa)
 head(group_df)
 #> # A tibble: 6 × 2
 #>   features  group
 #>   <list>    <chr>
 #> 1 <chr [1]> 1    
-#> 2 <chr [1]> 10   
-#> 3 <chr [1]> 11   
-#> 4 <chr [1]> 12   
-#> 5 <chr [2]> 14   
-#> 6 <chr [1]> 15
+#> 2 <chr [1]> 11   
+#> 3 <chr [1]> 12   
+#> 4 <chr [1]> 15   
+#> 5 <chr [4]> 17   
+#> 6 <chr [2]> 18
 ```
 
 Clear the downloaded files with `clear_cache()`
