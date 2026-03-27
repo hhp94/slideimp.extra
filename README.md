@@ -79,7 +79,7 @@ library(slideimp)
 msa <- ilmn_manifest("MSA")
 #> Found cleaned manifest for 'MSA'
 head(msa)
-#>        feature_id group
+#>          features group
 #> 1 cg06185909_TC11     4
 #> 2 cg18975462_BC11     8
 #> 3 cg20516119_TC11    11
@@ -87,33 +87,29 @@ head(msa)
 #> 5 cg24004665_BC11    10
 #> 6 cg12923664_BC11     8
 # simulate some data
-obj <- matrix(runif(10 * 20), nrow = 10, dimnames = list(seq_len(10), sample(msa$feature_id, size = 20)))
-obj[1:5, 1:5]
-#>   cg06073471_TC21 cg12391831_BC21 cg07906638_TC21 cg26682661_TC21
-#> 1       0.6288666      0.05310159       0.1474317      0.01799378
-#> 2       0.4261539      0.03797024       0.7840605      0.15483424
-#> 3       0.1805790      0.07739894       0.8004576      0.97651777
-#> 4       0.7118276      0.08357818       0.2607879      0.41817655
-#> 5       0.3911712      0.77349369       0.4773668      0.84309656
-#>   cg12687696_BC21
-#> 1      0.78255899
-#> 2      0.07970414
-#> 3      0.60911729
-#> 4      0.08739387
-#> 5      0.58904865
+obj <- matrix(runif(10 * 20), nrow = 10, dimnames = list(seq_len(10), sample(msa$features, size = 20)))
+obj[1:4, 1:4]
+#>   cg14302909_TC22 cg27125641_BC21 cg09643312_TC21 cg20043937_TC21
+#> 1       0.4841736       0.5346202       0.9785727       0.6110280
+#> 2       0.4191149       0.9988116       0.9976588       0.4657359
+#> 3       0.2546880       0.4220848       0.8610029       0.3019090
+#> 4       0.7868505       0.7702517       0.5032576       0.3093622
 group_df <- group_features(obj, msa)
-group_df
-#> # A tibble: 10 × 2
-#>    features  group
-#>    <list>    <chr>
-#>  1 <chr [1]> 12   
-#>  2 <chr [3]> 17   
-#>  3 <chr [1]> 19   
-#>  4 <chr [2]> 2    
-#>  5 <chr [3]> 3    
-#>  6 <chr [2]> 4    
-#>  7 <chr [2]> 5    
-#>  8 <chr [1]> 7    
-#>  9 <chr [3]> 8    
-#> 10 <chr [2]> X
+head(group_df)
+#> # A tibble: 6 × 2
+#>   features  group
+#>   <list>    <chr>
+#> 1 <chr [1]> 1    
+#> 2 <chr [1]> 10   
+#> 3 <chr [1]> 11   
+#> 4 <chr [1]> 12   
+#> 5 <chr [2]> 14   
+#> 6 <chr [1]> 15
+```
+
+Clear the downloaded files with `clear_cache()`
+
+``` r
+clear_cache()
+# Removed cache: 'MSA'
 ```

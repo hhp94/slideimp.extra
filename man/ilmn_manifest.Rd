@@ -36,7 +36,7 @@ Default to \code{FALSE}.}
 cleaned file.}
 }
 \value{
-A \code{data.frame()} with columns "feature_id" (probe identifiers) and
+A \code{data.frame()} with columns "features" (probe identifiers) and
 "group" (chromosomal locations), or \code{invisible(NULL)} if the chip is invalid.
 }
 \description{

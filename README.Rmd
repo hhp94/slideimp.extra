@@ -80,8 +80,15 @@ library(slideimp)
 msa <- ilmn_manifest("MSA")
 head(msa)
 # simulate some data
-obj <- matrix(runif(10 * 20), nrow = 10, dimnames = list(seq_len(10), sample(msa$feature_id, size = 20)))
-obj[1:5, 1:5]
+obj <- matrix(runif(10 * 20), nrow = 10, dimnames = list(seq_len(10), sample(msa$features, size = 20)))
+obj[1:4, 1:4]
 group_df <- group_features(obj, msa)
-group_df
+head(group_df)
 ```
+
+Clear the downloaded files with `clear_cache()`
+```{r, eval = F}
+clear_cache()
+# Removed cache: 'MSA'
+```
+

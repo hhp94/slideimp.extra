@@ -247,7 +247,7 @@ get_manifest <- function(
 #' @param ... Additional arguments passed to [fst::read_fst()] for reading the
 #' cleaned file.
 #'
-#' @return A `data.frame()` with columns "feature_id" (probe identifiers) and
+#' @return A `data.frame()` with columns "features" (probe identifiers) and
 #' "group" (chromosomal locations), or `invisible(NULL)` if the chip is invalid.
 #'
 #' @export
@@ -285,6 +285,61 @@ ilmn_manifest <- function(
     }
   }
   dt <- unique(fst::read_fst(path, columns = cols, ...))
-  names(dt) <- c("feature_id", "group")
+  names(dt) <- c("features", "group")
   return(dt)
+}
+
+#' Clear Cached Manifests
+#'
+#' Removes cleaned manifest files from the slideimp data directory.
+#'
+#' @param chip Character string specifying which chip's cache to clear,
+#'   or `NULL` to clear all cached manifests. Default is `NULL`.
+#' @param verbose Logical. Print messages. Default is `TRUE`.
+#'
+#' @return Invisibly returns a character vector of deleted paths.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' clear_cache("EPICv2")
+#' clear_cache()
+#' }
+clear_cache <- function(chip = NULL, verbose = TRUE) {
+  checkmate::assert_string(chip, null.ok = TRUE)
+  checkmate::assert_flag(verbose)
+  m <- msg(verbose)
+
+  cache_dir <- get_slideimp_path(create = FALSE)
+
+  if (!fs::dir_exists(cache_dir)) {
+    m("No cache directory found.")
+    return(invisible(character(0)))
+  }
+
+  chips <- if (is.null(chip)) {
+    ilmn_meth_mani$chip
+  } else {
+    if (!chip %in% ilmn_meth_mani$chip) {
+      m(sprintf(
+        "Unknown chip '%s'. Available: %s",
+        chip, paste(sprintf("'%s'", ilmn_meth_mani$chip), collapse = ", ")
+      ))
+      return(invisible(character(0)))
+    }
+    chip
+  }
+
+  targets <- fs::path(cache_dir, chips, paste0(chips, ".fst"))
+  targets <- targets[fs::file_exists(targets)]
+
+  if (length(targets) == 0) {
+    m("Nothing to clear.")
+    return(invisible(character(0)))
+  }
+
+  fs::file_delete(targets)
+  m(paste(sprintf("Removed: '%s'", targets), collapse = "\n"))
+
+  invisible(targets)
 }
