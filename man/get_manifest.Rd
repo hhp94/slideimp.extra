@@ -6,9 +6,10 @@
 \usage{
 get_manifest(
   chip = NULL,
-  rawdir = withr::local_tempdir(),
+  rawdir = NULL,
   force = FALSE,
   clean_up = FALSE,
+  ask = TRUE,
   verbose = TRUE
 )
 }
@@ -17,13 +18,15 @@ get_manifest(
 options are returned}
 
 \item{rawdir}{Directory where raw manifest files are downloaded and stored.
-Defaults to a temporary directory.}
+Defaults to NULL (a temporary directory).}
 
 \item{force}{Forces re-download and re-cleaning of the manifest.
 Default to \code{FALSE}.}
 
 \item{clean_up}{deletes the raw manifest file after cleaning. Useful if
 \code{rawdir} is not a temporary folder. Default to \code{FALSE}.}
+
+\item{ask}{Ask for permission to download or delete the cache. Default is \code{TRUE}.}
 
 \item{verbose}{prints messages. Default is \code{TRUE}.}
 }

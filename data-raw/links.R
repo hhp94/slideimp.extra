@@ -20,12 +20,6 @@ ilmn_meth_mani <- tibble::tibble(
     "InfiniumMethylationEPICv2.0ProductFiles(ZIPFormat).zip",
     "MSA-48v1-0_20102838_A1.csv"
   ),
-  hash_raw = c(
-    "052e360bfe68b249dab782cfb5a70b06",
-    "045b7b261943ec623ac850f033c528bf",
-    "950a4e10b191b919d241a3bbee536786",
-    "6f2ec1fd41060a39a23942fc94a2ea4c"
-  ),
   hash_clean = c(
     "db5ddfd542306dd0cc7ec5be56daf37e",
     "aec2953466c178adee40bd8fba1f398e",

@@ -4,14 +4,16 @@
 \alias{download_manifest}
 \title{Download Raw Illumina Methylation Manifest}
 \usage{
-download_manifest(chip = NULL, rawdir = withr::local_tempdir(), verbose = TRUE)
+download_manifest(chip = NULL, rawdir = NULL, ask = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{chip}{The name of the Illumina methylation chip. If \code{NULL}, then all available
 options are returned}
 
 \item{rawdir}{Directory where raw manifest files are downloaded and stored.
-Defaults to a temporary directory.}
+Defaults to NULL (a temporary directory).}
+
+\item{ask}{Ask for permission to download or delete the cache. Default is \code{TRUE}.}
 
 \item{verbose}{prints messages. Default is \code{TRUE}.}
 }
@@ -21,8 +23,10 @@ or \code{invisible(NULL)} if the chip is invalid or not specified.
 }
 \description{
 Downloads the raw manifest file for a specified Illumina methylation array chip.
-It checks for existing files and verifies integrity using a pre-defined hash.
-If the file is missing or the hash mismatches, it re-downloads the file.
+Integrity is not verified at this stage; verification happens on the cleaned
+output in \code{\link[=get_manifest]{get_manifest()}} via \code{hash_clean}. If Illumina re-uploads a file
+with cosmetic changes (line endings, BOM, etc.), the cleaned hash will still
+match as long as the relevant columns are unchanged.
 }
 \examples{
 \dontrun{

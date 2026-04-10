@@ -7,9 +7,10 @@
 ilmn_manifest(
   chip = NULL,
   dedupped = FALSE,
-  rawdir = withr::local_tempdir(),
+  rawdir = NULL,
   force = FALSE,
   clean_up = FALSE,
+  ask = TRUE,
   verbose = TRUE,
   ...
 )
@@ -22,7 +23,7 @@ options are returned}
 or IlmnID (\code{FALSE}). Default is \code{FALSE}.}
 
 \item{rawdir}{Directory where raw manifest files are downloaded and stored.
-Defaults to a temporary directory.}
+Defaults to NULL (a temporary directory).}
 
 \item{force}{Forces re-download and re-cleaning of the manifest.
 Default to \code{FALSE}.}
@@ -30,13 +31,15 @@ Default to \code{FALSE}.}
 \item{clean_up}{deletes the raw manifest file after cleaning. Useful if
 \code{rawdir} is not a temporary folder. Default to \code{FALSE}.}
 
+\item{ask}{Ask for permission to download or delete the cache. Default is \code{TRUE}.}
+
 \item{verbose}{prints messages. Default is \code{TRUE}.}
 
 \item{...}{Additional arguments passed to \code{\link[fst:write_fst]{fst::read_fst()}} for reading the
 cleaned file.}
 }
 \value{
-A \code{data.frame()} with columns "features" (probe identifiers) and
+A \code{data.frame()} with columns "feature" (probe identifiers) and
 "group" (chromosomal locations), or \code{invisible(NULL)} if the chip is invalid.
 }
 \description{

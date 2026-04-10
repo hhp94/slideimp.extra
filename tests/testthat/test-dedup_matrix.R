@@ -22,4 +22,3 @@ test_that("dedup_matrix correctly deduplicates CpGs using mean", {
   result <- result[, colnames(expected_mat)]
   expect_equal(result, expected_mat)
 })
-

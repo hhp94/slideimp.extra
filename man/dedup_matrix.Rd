@@ -2,7 +2,7 @@
 % Please edit documentation in R/dedup_matrix.R
 \name{dedup_matrix}
 \alias{dedup_matrix}
-\title{De-duplicate Matrix by CpG Names}
+\title{De-duplicate Matrix}
 \usage{
 dedup_matrix(obj, chip, method = c("mean", "median"), verbose = TRUE)
 }
