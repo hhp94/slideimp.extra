@@ -52,6 +52,6 @@ chromosomal groups.
 ilmn_manifest()
 
 \dontrun{
-ilmn_manifest("EPICv2", dedupped = TRUE)
+ilmn_manifest("EPICv2")
 }
 }
