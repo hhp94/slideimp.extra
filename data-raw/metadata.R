@@ -75,7 +75,5 @@ sim_mat <- matrix(rnorm(10 * length(cn)), dimnames = list(NULL, cn), ncol = leng
 
 prep_groups(colnames(sim_mat), group = MSA_clean) |> print(n = Inf)
 
-supported_platforms <- c("EPICv2", "MSA", "EPICv2_deduped", "MSA_deduped", "EPICv1", "450K")
-
 # Export ----
-usethis::use_data(ilmn_meth_mani, MSAdd_excl, EPICv2dd_excl, supported_platforms, overwrite = TRUE, internal = TRUE)
+usethis::use_data(ilmn_meth_mani, MSAdd_excl, EPICv2dd_excl, overwrite = TRUE, internal = TRUE)
