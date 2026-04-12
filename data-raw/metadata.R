@@ -32,28 +32,24 @@ ilmn_meth_mani <- dplyr::mutate(
   dplyr::across(.cols = dplyr::everything(), .fns = \(x) purrr::set_names(x, chip))
 )
 
-# List of rows to remove for EPICv2 and MSA dedupped ----
+# List of rows to remove for EPICv2 and MSA deduped ----
 library(data.table)
-
+library(fst)
+library(slideimp)
 set_slideimp_path("dev")
-download_manifest("EPICv2", rawdir = "dev")
-download_manifest("MSA", rawdir = "dev")
 
 ## EPICv2
-EPICv2 <- read_fst("dev/EPICv2/EPICv2.fst", as.data.table = TRUE)
-EPICv2dd <- ilmn_manifest("EPICv2", dedupped = TRUE) |> as.data.table()
+EPICv2 <- read_fst(get_manifest("EPICv2", rawdir = "dev"), as.data.table = TRUE)
+EPICv2dd <- unique(EPICv2[, list(feature = Name, group = CHR_38)])
+EPICv2dd
 # a couple of probes that maps to chr 0 and other chr
 EPICv2dd[feature %in% EPICv2dd[, .N, by = feature][N > 1, feature]]
 EPICv2dd_excl <- EPICv2dd[feature %in% EPICv2dd[, .N, by = feature][N > 1, feature]][group == "0", ]
 EPICv2dd_excl
-### Results
-EPICv2dd |> nrow()
-EPICv2dd_fin <- collapse::join(EPICv2dd, EPICv2dd_excl, on = c("feature", "group"), how = "anti")
-EPICv2dd_fin |> nrow()
 
 ## MSA
-MSA <- read_fst("dev/MSA/MSA.fst", as.data.table = TRUE)
-MSAdd <- ilmn_manifest("MSA", dedupped = TRUE, rawdir = "dev") |> as.data.table()
+MSA <- read_fst(get_manifest("MSA", rawdir = "dev"), as.data.table = TRUE)
+MSAdd <- unique(MSA[, list(feature = Name, group = CHR_38)])
 # it's just a couple of probes that maps to both chr 0 and something else.
 dcast(MSAdd[feature %in% MSAdd[, .N, by = feature][N > 1, feature]], feature ~ group)
 all(
@@ -68,16 +64,18 @@ MSAdd_excl
 EPICv2_clean <- EPICv2dd[!EPICv2dd_excl, on = c("feature", "group")]
 
 cn <- EPICv2[, unique(Name)]
-sim_mat <- matrix(rnorm(10*length(cn)), dimnames = list(NULL, cn), ncol = length(cn), nrow = 10)
+sim_mat <- matrix(rnorm(10 * length(cn)), dimnames = list(NULL, cn), ncol = length(cn), nrow = 10)
 
 prep_groups(colnames(sim_mat), group = EPICv2_clean) |> print(n = Inf)
 
 MSA_clean <- MSAdd[!MSAdd_excl, on = c("feature", "group")]
 
 cn <- MSA[, unique(Name)]
-sim_mat <- matrix(rnorm(10*length(cn)), dimnames = list(NULL, cn), ncol = length(cn), nrow = 10)
+sim_mat <- matrix(rnorm(10 * length(cn)), dimnames = list(NULL, cn), ncol = length(cn), nrow = 10)
 
 prep_groups(colnames(sim_mat), group = MSA_clean) |> print(n = Inf)
 
+supported_platforms <- c("EPICv2", "MSA", "EPICv2_deduped", "MSA_deduped", "EPICv1", "450K")
+
 # Export ----
-usethis::use_data(ilmn_meth_mani, MSAdd_excl, EPICv2dd_excl, overwrite = TRUE, internal = TRUE)
+usethis::use_data(ilmn_meth_mani, MSAdd_excl, EPICv2dd_excl, supported_platforms, overwrite = TRUE, internal = TRUE)

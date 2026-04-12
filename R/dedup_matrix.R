@@ -57,7 +57,7 @@ dedup_matrix <- function(obj, chip, method = c("mean", "median"), verbose = TRUE
   if (nrow(chip) == 0) {
     stop(
       "None of the colnames(obj) found in the indicated manifest. ",
-      "Has this matrix already been dedupped or is it on a different chip?"
+      "Has this matrix already been deduped or is it on a different chip?"
     )
   }
 
@@ -91,24 +91,24 @@ dedup_matrix <- function(obj, chip, method = c("mean", "median"), verbose = TRUE
 
   dupped_matrix <- merge(dupped_matrix, dupped_manifest, by = "IlmnID")
 
-  dedupped_matrix <- dupped_matrix[,
+  deduped_matrix <- dupped_matrix[,
     list(value = method(value, na.rm = TRUE)),
     by = c("__sample_id__", "Name")
   ]
 
-  dedupped_matrix <- dcast(
-    dedupped_matrix,
+  deduped_matrix <- dcast(
+    deduped_matrix,
     formula = `__sample_id__` ~ Name,
     value.var = "value"
   )
 
-  dedupped_matrix <- as.matrix(dedupped_matrix, rownames = "__sample_id__")
-  new_row_names <- row.names(dedupped_matrix)
+  deduped_matrix <- as.matrix(deduped_matrix, rownames = "__sample_id__")
+  new_row_names <- row.names(deduped_matrix)
 
   # non dup CpGs
   single_manifest <- chip[!IlmnID %in% dupped_manifest[["IlmnID"]]]
   single_matrix <- obj[new_row_names, single_manifest[["IlmnID"]]]
   colnames(single_matrix) <- single_manifest$Name
 
-  return(cbind(single_matrix, dedupped_matrix, obj[new_row_names, nomatch])[row.names(obj), ])
+  return(cbind(single_matrix, deduped_matrix, obj[new_row_names, nomatch])[row.names(obj), ])
 }

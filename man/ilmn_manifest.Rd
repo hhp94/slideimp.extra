@@ -6,7 +6,7 @@
 \usage{
 ilmn_manifest(
   chip = NULL,
-  dedupped = FALSE,
+  deduped = FALSE,
   rawdir = NULL,
   force = FALSE,
   clean_up = FALSE,
@@ -19,7 +19,7 @@ ilmn_manifest(
 \item{chip}{The name of the Illumina methylation chip. If \code{NULL}, then all available
 options are returned}
 
-\item{dedupped}{Use deduplicated probe names for EPICv2 and MSA chips (\code{TRUE})
+\item{deduped}{Use deduplicated probe names for EPICv2 and MSA chips (\code{TRUE})
 or IlmnID (\code{FALSE}). Default is \code{FALSE}.}
 
 \item{rawdir}{Directory where raw manifest files are downloaded and stored.
