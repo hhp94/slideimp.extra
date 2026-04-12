@@ -308,7 +308,7 @@ clear_cache <- function(chip = NULL, verbose = TRUE, ask = TRUE) {
 #'
 #' @param chip The name of the Illumina methylation chip. If `NULL`, then all available
 #' options are returned
-#' @param dedupped Use deduplicated probe names for EPICv2 and MSA chips (`TRUE`)
+#' @param deduped Use deduplicated probe names for EPICv2 and MSA chips (`TRUE`)
 #' or IlmnID (`FALSE`). Default is `FALSE`.
 #' @param rawdir Directory where raw manifest files are downloaded and stored.
 #' Defaults to NULL (a temporary directory).
@@ -335,7 +335,7 @@ clear_cache <- function(chip = NULL, verbose = TRUE, ask = TRUE) {
 #' }
 ilmn_manifest <- function(
   chip = NULL,
-  dedupped = FALSE,
+  deduped = FALSE,
   rawdir = NULL,
   force = FALSE,
   clean_up = FALSE,
@@ -356,7 +356,7 @@ ilmn_manifest <- function(
   if (chip %in% c("450K", "EPICv1")) {
     cols <- c("IlmnID", "CHR_37")
   } else if (chip %in% c("EPICv2", "MSA")) {
-    if (dedupped) {
+    if (deduped) {
       cols <- c("Name", "CHR_38")
     } else {
       cols <- c("IlmnID", "CHR_38")
@@ -365,12 +365,15 @@ ilmn_manifest <- function(
   dt <- unique(fst::read_fst(path, columns = cols, as.data.table = TRUE, ...))
   names(dt) <- c("feature", "group")
   if (chip %in% c("EPICv2", "MSA")) {
-    if (dedupped) {
-      remove <- switch(chip, EPICv2 = EPICv2dd_excl, MSA = MSAdd_excl)
+    if (deduped) {
+      remove <- switch(chip,
+        EPICv2 = EPICv2dd_excl,
+        MSA = MSAdd_excl
+      )
       dt <- dt[!remove, on = c("feature", "group")]
     }
   }
-  stopifnot("Please report this error to pkg author"=anyDuplicated(dt$feature) == 0)
+  stopifnot("Please report this error to pkg author" = anyDuplicated(dt$feature) == 0)
   return(dt)
 }
 
