@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-`{slideimp.extra}` contains helpful tools for [`{slideimp}`](https://github.com/hhp94/slideimp) such as the downloading of Illumina manifests for the `slideimp::group_features()` function.
+`{slideimp.extra}` contains helpful tools for [`{slideimp}`](https://github.com/hhp94/slideimp) such as the downloading of Illumina manifests for the `slideimp::prep_groups()` function.
 
 ## Installation
 
@@ -74,10 +74,16 @@ The path to the cleaned manifest can be fetched with `get_manifest()`.
 get_manifest("MSA")
 ```
 
-We can now read the manifest into memory and use it with the `slideimp::group_features()` function from `{slideimp}` to perform grouped imputation with `slideimp::group_imp()`.
+We can now read the manifest into memory and use it with the `slideimp::prep_groups()` function from `{slideimp}` to perform grouped imputation with `slideimp::group_imp()`.
 
-```{r, eval = FALSE}
+```{r, include=FALSE, echo=FALSE}
+set_slideimp_path("dev")
+get_manifest("MSA", rawdir = "dev")
+```
+
+```{r}
 library(slideimp)
+set.seed(1234)
 msa <- ilmn_manifest("MSA")
 head(msa)
 #           feature group
@@ -87,15 +93,22 @@ head(msa)
 # 4 cg10149399_BC11     6
 # 5 cg24004665_BC11    10
 # 6 cg12923664_BC11     8
+
 # simulate some data
-obj <- matrix(runif(10 * 20), nrow = 10, dimnames = list(seq_len(10), sample(msa$feature, size = 20)))
+obj <- matrix(
+  runif(10 * 20),
+  nrow = 10,
+  dimnames = list(seq_len(10), sample(msa$feature, size = 20))
+)
+
 obj[1:4, 1:4]
 #   cg04747704_TC21 cg20470442_BC11 cg23607994_BC11 cg00464814_TC21
 # 1      0.09159897       0.7819234       0.8687001       0.4644673
 # 2      0.32974132       0.4722311       0.4081508       0.5321599
 # 3      0.01260905       0.9077130       0.2654032       0.7748766
 # 4      0.11912636       0.6653247       0.4493103       0.2432860
-group_df <- group_features(obj, msa)
+
+group_df <- prep_groups(colnames(obj), msa)
 head(group_df)
 # # A tibble: 6 × 2
 #   feature   group
@@ -111,7 +124,8 @@ head(group_df)
 Clear the downloaded files with `clear_cache()`
 ```{r, eval = F}
 clear_cache()
-# ask deletion? [y/n]: y
-# Removed cache: 'MSA'
+# The following files will be deleted:
+#   - 'dev/MSA/MSA.fst'
+# confirm deletion? [y/n]: y
 ```
 

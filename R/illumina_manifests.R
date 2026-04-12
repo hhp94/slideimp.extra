@@ -223,7 +223,9 @@ get_manifest <- function(
     "EPICv2" = clean_EPICv2,
     "MSA" = clean_MSA
   )
-  raw_path <- download_manifest(chip = chip, rawdir = rawdir, ask = ask, verbose = verbose)
+  raw_path <- download_manifest(
+    chip = chip, rawdir = rawdir, ask = ask, verbose = verbose
+  )
   if (is.null(raw_path)) {
     return(invisible(NULL))
   }
@@ -329,7 +331,7 @@ clear_cache <- function(chip = NULL, verbose = TRUE, ask = TRUE) {
 #' ilmn_manifest()
 #'
 #' \dontrun{
-#' ilmn_manifest("EPICv2", dedupped = TRUE)
+#' ilmn_manifest("EPICv2")
 #' }
 ilmn_manifest <- function(
   chip = NULL,
@@ -360,8 +362,15 @@ ilmn_manifest <- function(
       cols <- c("IlmnID", "CHR_38")
     }
   }
-  dt <- unique(fst::read_fst(path, columns = cols, ...))
+  dt <- unique(fst::read_fst(path, columns = cols, as.data.table = TRUE, ...))
   names(dt) <- c("feature", "group")
+  if (chip %in% c("EPICv2", "MSA")) {
+    if (dedupped) {
+      remove <- switch(chip, EPICv2 = EPICv2dd_excl, MSA = MSAdd_excl)
+      dt <- dt[!remove, on = c("feature", "group")]
+    }
+  }
+  stopifnot("Please report this error to pkg author"=anyDuplicated(dt$feature) == 0)
   return(dt)
 }
 
