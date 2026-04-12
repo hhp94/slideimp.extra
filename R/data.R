@@ -1,0 +1,42 @@
+#' Supported Illumina DNA methylation microarray platforms
+#'
+#' A character vector of Illumina Infinium BeadChip microarrays supported by the
+#' `slideimp` package. These are the microarrays used for genome-wide DNA
+#' methylation profiling.
+#'
+#' The vector includes both the original microarrays and their "deduped" variants.
+#' For `EPICv2_deduped` and `MSA_deduped`, duplicated CpG probes (which appear
+#' multiple times in the official Illumina manifest for the same CpG site) have
+#' been collapsed into a single representative entry. This is a standard
+#' preprocessing step when working with EPICv2 and MSA data.
+#'
+#' @format ## `slideimp_arrays`
+#' A character vector with 6 elements:
+#' \describe{
+#'   \item{EPICv2}{Infinium MethylationEPIC v2.0 BeadChip}
+#'   \item{MSA}{Infinium Methylation Screening Array (MSA-48)}
+#'   \item{EPICv2_deduped}{EPICv2 with duplicated CpG probes collapsed}
+#'   \item{MSA_deduped}{MSA with duplicated CpG probes collapsed}
+#'   \item{EPICv1}{Infinium MethylationEPIC v1.0 BeadChip}
+#'   \item{450K}{Infinium HumanMethylation450 BeadChip}
+#' }
+#'
+#' @details
+#' Manifest files and versions used to build/support these microarrays:
+#' \itemize{
+#'   \item \strong{450K} (v1-2):
+#'     \url{https://webdata.illumina.com/downloads/productfiles/humanmethylation450/humanmethylation450_15017482_v1-2.csv}
+#'   \item \strong{EPICv1} (v1-0-b5):
+#'     \url{https://webdata.illumina.com/downloads/productfiles/methylationEPIC/infinium-methylationepic-v-1-0-b5-manifest-file-csv.zip}
+#'   \item \strong{EPICv2} (v2-0_A2):
+#'     \url{https://support.illumina.com/content/dam/illumina-support/documents/downloads/productfiles/methylationepic/InfiniumMethylationEPICv2.0ProductFiles(ZIPFormat).zip}
+#'   \item \strong{MSA} (v1-0_20102838_A1):
+#'     \url{https://support.illumina.com/content/dam/illumina-support/documents/downloads/productfiles/infiniummethylationscreening/MSA-48v1-0_20102838_A1.csv}
+#' }
+#'
+#' The `_deduped` microarrays are derived from the above manifests (no separate
+#' public download).
+#'
+#' @source Illumina official manifest files (see @details for exact links and
+#'   versions used).
+"slideimp_arrays"
