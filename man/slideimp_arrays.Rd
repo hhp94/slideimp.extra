@@ -27,8 +27,8 @@ slideimp_arrays
 }
 \description{
 A character vector of Illumina Infinium BeadChip microarrays supported by the
-\code{slideimp} package (or associated data objects). These are the microarrays used
-for genome-wide DNA methylation profiling.
+\code{slideimp} package. These are the microarrays used for genome-wide DNA
+methylation profiling.
 }
 \details{
 The vector includes both the original microarrays and their "deduped" variants.
