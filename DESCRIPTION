@@ -16,6 +16,7 @@ Imports:
     fs,
     fst,
     rlang,
+    slideimp,
     stats,
     utils,
     withr
