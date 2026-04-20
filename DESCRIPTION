@@ -1,7 +1,7 @@
 Type: Package
 Package: slideimp.extra
 Title: slideimp Package Helpers
-Version: 0.6.7
+Version: 0.6.8
 Authors@R: 
     person("Hung", "Pham", , "amser.hoanghung@gmail.com", role = c("aut", "cre"))
 Description: Contains helper functions for the slideimp package. These

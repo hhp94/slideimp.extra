@@ -2,7 +2,6 @@
 
 export(clear_cache)
 export(dedup_matrix)
-export(download_manifest)
 export(get_manifest)
 export(get_slideimp_path)
 export(ilmn_manifest)

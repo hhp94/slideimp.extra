@@ -12,15 +12,11 @@ msg <- function(verbose) {
 #'
 #' @inheritParams ilmn_manifest
 #'
-#' @return The path to the downloaded manifest file as a character string,
-#' or `invisible(NULL)` if the chip is invalid or not specified.
+#' @return Path to the downloaded manifest file, or `invisible(NULL)` if
+#' the chip is invalid or not specified.
 #'
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' download_manifest("EPICv1")
-#' }
+#' @noRd
+#' @keywords internal
 download_manifest <- function(chip = NULL, rawdir = NULL, ask = TRUE, verbose = TRUE) {
   checkmate::assert_string(chip, null.ok = TRUE, .var.name = "chip")
   checkmate::assert_string(rawdir, null.ok = TRUE, .var.name = "rawdir")
@@ -203,7 +199,9 @@ get_manifest <- function(
   chip = NULL, rawdir = NULL, force = FALSE,
   clean_up = FALSE, ask = TRUE, verbose = TRUE
 ) {
+  checkmate::assert_choice(chip, choices = ilmn_meth_mani$chip, null.ok = TRUE)
   checkmate::assert_string(rawdir, null.ok = TRUE, .var.name = "rawdir")
+  checkmate::assert_flag(force, .var.name = "force")
   checkmate::assert_flag(clean_up, .var.name = "clean_up")
   checkmate::assert_flag(ask, .var.name = "ask")
   checkmate::assert_flag(verbose, .var.name = "verbose")
@@ -343,8 +341,16 @@ ilmn_manifest <- function(
   verbose = TRUE,
   ...
 ) {
+  checkmate::assert_choice(chip, choices = ilmn_meth_mani$chip, null.ok = TRUE)
+  checkmate::assert_flag(deduped, .var.name = "deduped")
   checkmate::assert_string(rawdir, null.ok = TRUE, .var.name = "rawdir")
+  checkmate::assert_flag(force, .var.name = "force")
+  checkmate::assert_flag(clean_up, .var.name = "clean_up")
+  checkmate::assert_flag(ask, .var.name = "ask")
+  checkmate::assert_flag(verbose, .var.name = "verbose")
   if (is.null(rawdir)) rawdir <- withr::local_tempdir()
+  m <- msg(verbose)
+
   path <- get_manifest(
     chip = chip,
     rawdir = rawdir, force = force, clean_up = clean_up,
@@ -354,26 +360,27 @@ ilmn_manifest <- function(
     return(invisible(NULL))
   }
   if (chip %in% c("450K", "EPICv1")) {
-    cols <- c("IlmnID", "CHR_37")
-  } else if (chip %in% c("EPICv2", "MSA")) {
     if (deduped) {
-      cols <- c("Name", "CHR_38")
-    } else {
-      cols <- c("IlmnID", "CHR_38")
+      m(sprintf("'deduped' is ignored for '%s' (no duplicate probes).", chip))
     }
+    cols <- c("IlmnID", "CHR_37")
+  } else {
+    # EPICv2 / MSA — guaranteed by assert_choice above
+    cols <- if (deduped) c("Name", "CHR_38") else c("IlmnID", "CHR_38")
   }
   dt <- unique(fst::read_fst(path, columns = cols, as.data.table = TRUE, ...))
   names(dt) <- c("feature", "group")
-  if (chip %in% c("EPICv2", "MSA")) {
-    if (deduped) {
-      remove <- switch(chip,
-        EPICv2 = EPICv2dd_excl,
-        MSA = MSAdd_excl
-      )
-      dt <- dt[!remove, on = c("feature", "group")]
-    }
+  if (chip %in% c("EPICv2", "MSA") && deduped) {
+    remove <- switch(chip,
+      EPICv2 = EPICv2dd_excl,
+      MSA = MSAdd_excl
+    )
+    dt <- dt[!remove, on = c("feature", "group")]
   }
-  stopifnot("Please report this error to pkg author" = anyDuplicated(dt$feature) == 0)
+  stopifnot(
+    "Please report this error to pkg author" =
+      anyDuplicated(dt$feature) == 0
+  )
   return(dt)
 }
 
