@@ -11,5 +11,10 @@ Contains helper functions for the slideimp package. These functions handle the p
 \author{
 \strong{Maintainer}: Hung Pham \email{amser.hoanghung@gmail.com}
 
+Authors:
+\itemize{
+  \item Hung Pham \email{amser.hoanghung@gmail.com}
+}
+
 }
 \keyword{internal}

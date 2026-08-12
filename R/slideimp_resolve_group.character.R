@@ -17,13 +17,12 @@
 #' @keywords internal
 #' @exportS3Method slideimp::slideimp_resolve_group
 slideimp_resolve_group.character <- function(x) {
-  checkmate::assert_choice(x, choices = slideimp_arrays)
+  # `slideimp_arrays` is lazy-loaded data, which does not live in the package
+  # namespace, so it must be reached via `::` from package code.
+  checkmate::assert_choice(x, choices = slideimp.extra::slideimp_arrays)
   deduped <- x %in% c("EPICv2_deduped", "MSA_deduped")
   if (deduped) {
-    x <- switch(x,
-      EPICv2_deduped = "EPICv2",
-      MSA_deduped = "MSA"
-    )
+    x <- switch(x, EPICv2_deduped = "EPICv2", MSA_deduped = "MSA")
   }
   ilmn_manifest(chip = x, deduped = deduped)
 }

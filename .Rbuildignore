@@ -5,3 +5,5 @@
 ^temp$
 ^dev$
 ^LICENSE\.md$
+^\.positai$
+^\.claude$

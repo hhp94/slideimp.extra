@@ -1,4 +1,4 @@
-utils::globalVariables(c(".N", "IlmnID", "N", "value", "slideimp_arrays"))
+utils::globalVariables(c(".N", "IlmnID", "N", "value"))
 
 #' @import data.table
 NULL

@@ -17,12 +17,19 @@ msg <- function(verbose) {
 #'
 #' @noRd
 #' @keywords internal
-download_manifest <- function(chip = NULL, rawdir = NULL, ask = TRUE, verbose = TRUE) {
+download_manifest <- function(
+  chip = NULL,
+  rawdir = NULL,
+  ask = TRUE,
+  verbose = TRUE
+) {
   checkmate::assert_string(chip, null.ok = TRUE, .var.name = "chip")
   checkmate::assert_string(rawdir, null.ok = TRUE, .var.name = "rawdir")
   checkmate::assert_flag(ask, null.ok = FALSE, .var.name = "ask")
   checkmate::assert_flag(verbose, null.ok = FALSE, .var.name = "verbose")
-  if (is.null(rawdir)) rawdir <- withr::local_tempdir()
+  if (is.null(rawdir)) {
+    rawdir <- withr::local_tempdir()
+  }
   m <- msg(verbose)
   if (is.null(chip) || !chip %in% ilmn_meth_mani$chip) {
     m(sprintf(
@@ -48,7 +55,12 @@ download_manifest <- function(chip = NULL, rawdir = NULL, ask = TRUE, verbose = 
             return(invisible(NULL))
           }
         }
-        utils::download.file(url = url, destfile = fn_path, mode = "wb", quiet = !verbose)
+        utils::download.file(
+          url = url,
+          destfile = fn_path,
+          mode = "wb",
+          quiet = !verbose
+        )
         m(sprintf("Successfully downloaded '%s' manifest", chip))
       }
       return(invisible(fn_path))
@@ -56,7 +68,9 @@ download_manifest <- function(chip = NULL, rawdir = NULL, ask = TRUE, verbose = 
     error = function(e) {
       stop(sprintf(
         "Download failed for '%s': %s\nManual download: %s",
-        chip, conditionMessage(e), url
+        chip,
+        conditionMessage(e),
+        url
       ))
     }
   )
@@ -118,7 +132,12 @@ clean_450K <- clean_factory(
       skip = 7,
       select = c("IlmnID", "CHR", "MAPINFO")
     )
-    data.table::set(manifest, i = which(manifest$CHR == ""), j = "CHR", value = "0")
+    data.table::set(
+      manifest,
+      i = which(manifest$CHR == ""),
+      j = "CHR",
+      value = "0"
+    )
     names(manifest) <- c("IlmnID", "CHR_37", "MAPINFO_37")
     fst::write_fst(manifest, outfile)
   },
@@ -134,7 +153,12 @@ clean_EPICv1 <- clean_factory(
       skip = 7,
       select = c("IlmnID", "CHR", "MAPINFO")
     )
-    data.table::set(manifest, i = which(manifest$CHR == ""), j = "CHR", value = "0")
+    data.table::set(
+      manifest,
+      i = which(manifest$CHR == ""),
+      j = "CHR",
+      value = "0"
+    )
     names(manifest) <- c("IlmnID", "CHR_37", "MAPINFO_37")
     fst::write_fst(manifest, outfile)
   },
@@ -196,8 +220,12 @@ clean_MSA <- clean_factory(
 #' get_manifest("450K")
 #' }
 get_manifest <- function(
-  chip = NULL, rawdir = NULL, force = FALSE,
-  clean_up = FALSE, ask = TRUE, verbose = TRUE
+  chip = NULL,
+  rawdir = NULL,
+  force = FALSE,
+  clean_up = FALSE,
+  ask = TRUE,
+  verbose = TRUE
 ) {
   checkmate::assert_choice(chip, choices = ilmn_meth_mani$chip, null.ok = TRUE)
   checkmate::assert_string(rawdir, null.ok = TRUE, .var.name = "rawdir")
@@ -205,12 +233,17 @@ get_manifest <- function(
   checkmate::assert_flag(clean_up, .var.name = "clean_up")
   checkmate::assert_flag(ask, .var.name = "ask")
   checkmate::assert_flag(verbose, .var.name = "verbose")
-  if (is.null(rawdir)) rawdir <- withr::local_tempdir()
+  if (is.null(rawdir)) {
+    rawdir <- withr::local_tempdir()
+  }
   m <- msg(verbose)
   if (!is.null(chip) && chip %in% ilmn_meth_mani$chip && !force) {
     clean_path <- fs::path(get_slideimp_path(TRUE), chip, paste0(chip, ".fst"))
     expected_hash <- ilmn_meth_mani$hash_clean[chip]
-    if (fs::file_exists(clean_path) && rlang::hash_file(clean_path) == expected_hash) {
+    if (
+      fs::file_exists(clean_path) &&
+        rlang::hash_file(clean_path) == expected_hash
+    ) {
       m(sprintf("Found cleaned manifest for '%s'", chip))
       return(clean_path)
     }
@@ -222,7 +255,10 @@ get_manifest <- function(
     "MSA" = clean_MSA
   )
   raw_path <- download_manifest(
-    chip = chip, rawdir = rawdir, ask = ask, verbose = verbose
+    chip = chip,
+    rawdir = rawdir,
+    ask = ask,
+    verbose = verbose
   )
   if (is.null(raw_path)) {
     return(invisible(NULL))
@@ -270,7 +306,8 @@ clear_cache <- function(chip = NULL, verbose = TRUE, ask = TRUE) {
     if (!chip %in% ilmn_meth_mani$chip) {
       m(sprintf(
         "Unknown chip '%s'. Available: %s",
-        chip, paste(sprintf("'%s'", ilmn_meth_mani$chip), collapse = ", ")
+        chip,
+        paste(sprintf("'%s'", ilmn_meth_mani$chip), collapse = ", ")
       ))
       return(invisible(character(0)))
     }
@@ -348,13 +385,18 @@ ilmn_manifest <- function(
   checkmate::assert_flag(clean_up, .var.name = "clean_up")
   checkmate::assert_flag(ask, .var.name = "ask")
   checkmate::assert_flag(verbose, .var.name = "verbose")
-  if (is.null(rawdir)) rawdir <- withr::local_tempdir()
+  if (is.null(rawdir)) {
+    rawdir <- withr::local_tempdir()
+  }
   m <- msg(verbose)
 
   path <- get_manifest(
     chip = chip,
-    rawdir = rawdir, force = force, clean_up = clean_up,
-    ask = ask, verbose = verbose
+    rawdir = rawdir,
+    force = force,
+    clean_up = clean_up,
+    ask = ask,
+    verbose = verbose
   )
   if (is.null(path)) {
     return(invisible(NULL))
@@ -371,15 +413,11 @@ ilmn_manifest <- function(
   dt <- unique(fst::read_fst(path, columns = cols, as.data.table = TRUE, ...))
   names(dt) <- c("feature", "group")
   if (chip %in% c("EPICv2", "MSA") && deduped) {
-    remove <- switch(chip,
-      EPICv2 = EPICv2dd_excl,
-      MSA = MSAdd_excl
-    )
+    remove <- switch(chip, EPICv2 = EPICv2dd_excl, MSA = MSAdd_excl)
     dt <- dt[!remove, on = c("feature", "group")]
   }
   stopifnot(
-    "Please report this error to pkg author" =
-      anyDuplicated(dt$feature) == 0
+    "Please report this error to pkg author" = anyDuplicated(dt$feature) == 0
   )
   return(dt)
 }

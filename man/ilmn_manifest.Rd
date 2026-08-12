@@ -35,7 +35,7 @@ Default to \code{FALSE}.}
 
 \item{verbose}{prints messages. Default is \code{TRUE}.}
 
-\item{...}{Additional arguments passed to \code{\link[fst:write_fst]{fst::read_fst()}} for reading the
+\item{...}{Additional arguments passed to \code{\link[fst:read_fst]{fst::read_fst()}} for reading the
 cleaned file.}
 }
 \value{

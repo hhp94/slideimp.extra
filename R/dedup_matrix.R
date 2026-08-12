@@ -11,7 +11,12 @@
 #' @return A de-duplicated matrix.
 #' @export
 #' @import data.table
-dedup_matrix <- function(obj, chip, method = c("mean", "median"), verbose = TRUE) {
+dedup_matrix <- function(
+  obj,
+  chip,
+  method = c("mean", "median"),
+  verbose = TRUE
+) {
   method <- match.arg(method)
   method <- if (method == "mean") mean else stats::median
 
@@ -25,7 +30,8 @@ dedup_matrix <- function(obj, chip, method = c("mean", "median"), verbose = TRUE
   )
 
   stopifnot(
-    "please remove column `__sample_id__` from `obj`" = !"__sample_id__" %in% colnames(obj)
+    "please remove column `__sample_id__` from `obj`" = !"__sample_id__" %in%
+      colnames(obj)
   )
 
   checkmate::assert(
@@ -37,8 +43,9 @@ dedup_matrix <- function(obj, chip, method = c("mean", "median"), verbose = TRUE
 
   if (is.data.frame(chip)) {
     stopifnot(
-      "if 'chip' is a data.frame, it must have the `IlmnID` and `Name` columns" =
-        all(c("IlmnID", "Name") %in% names(chip))
+      "if 'chip' is a data.frame, it must have the `IlmnID` and `Name` columns" = all(
+        c("IlmnID", "Name") %in% names(chip)
+      )
     )
     if (!is.data.table(chip)) {
       chip <- as.data.table(chip)
@@ -63,14 +70,19 @@ dedup_matrix <- function(obj, chip, method = c("mean", "median"), verbose = TRUE
 
   nomatch <- setdiff(colnames(obj), chip[["IlmnID"]])
   if (length(nomatch) > 0) {
-    warning(sprintf("%d column(s) not found in the provided chip manifest", length(nomatch)))
+    warning(sprintf(
+      "%d column(s) not found in the provided chip manifest",
+      length(nomatch)
+    ))
   }
 
   # handle duplicated part
   dupped <- chip[, .N, by = "Name"][N > 1, ]
 
   if (nrow(dupped) == 0) {
-    if (verbose) message("No duplicated CpGs found")
+    if (verbose) {
+      message("No duplicated CpGs found")
+    }
     return(obj)
   }
 
@@ -110,5 +122,7 @@ dedup_matrix <- function(obj, chip, method = c("mean", "median"), verbose = TRUE
   single_matrix <- obj[new_row_names, single_manifest[["IlmnID"]]]
   colnames(single_matrix) <- single_manifest$Name
 
-  return(cbind(single_matrix, deduped_matrix, obj[new_row_names, nomatch])[row.names(obj), ])
+  return(cbind(single_matrix, deduped_matrix, obj[new_row_names, nomatch])[
+    row.names(obj),
+  ])
 }
